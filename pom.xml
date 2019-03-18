@@ -35,7 +35,12 @@
 			<artifactId>lombok</artifactId>
 			<version>1.16.20</version>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/com.sendgrid/sendgrid-java -->
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>4.3.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
