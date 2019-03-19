@@ -65,7 +65,7 @@ public class ExampleController {
   private void sendEmail() {
     Email from = new Email("test@example.com");
     String subject = "Sending with SendGrid is Fun";
-    Email to = new Email("baohoan906@gmail.com");
+    Email to = new Email("baohoan90@gmail.com");
     Content content = new Content("text/plain", "and easy to do anywhere, even with Java");
     Mail mail = new Mail(from, subject, to, content);
 
