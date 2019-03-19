@@ -3,6 +3,8 @@ package com.hoan.lam.demo;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,8 +89,14 @@ public class ExampleController {
   public String load(@RequestBody List<Bounce> requestBody) {
     if (requestBody != null) {
       String json = object2Json(requestBody);
-      deleteMails(requestBody.stream().map(x -> x.getEmail()).collect(Collectors.toSet()));
       log.info("post method is loading... {}", json);
+
+      CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+        deleteMails(requestBody.stream().map(x -> x.getEmail()).collect(Collectors.toSet()));
+        log.info("I'll run in a separate thread than the main thread.");
+      });
+      
+      log.info("Run Async is done! {}", future.isDone());
       return json;
     }
     log.info("post method is loading...");
