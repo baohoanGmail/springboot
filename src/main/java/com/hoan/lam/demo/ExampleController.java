@@ -62,9 +62,9 @@ public class ExampleController {
     return "Greetings from Spring Boot!";
   }
 
-  private void sendEmail() {
+  private void sendEmail(String address) {
     Email from = new Email("test@example.com");
-    String subject = "Sending with SendGrid is Fun";
+    String subject = "[Undeliverd Email] " + address;
     Email to = new Email("baohoan90@gmail.com");
     Content content = new Content("text/plain", "and easy to do anywhere, even with Java");
     Mail mail = new Mail(from, subject, to, content);
@@ -116,13 +116,13 @@ public class ExampleController {
     if (requestBody != null) {
       String json = object2Json(requestBody);
       log.info("post method is loading... {}", json);
-
+      Set<String> mails = requestBody.stream().map(x -> x.getEmail()).collect(Collectors.toSet());
       CompletableFuture<Void> deleteMails = CompletableFuture.runAsync(() -> {
-        deleteMails(requestBody.stream().map(x -> x.getEmail()).collect(Collectors.toSet()));
+        deleteMails(mails);
         log.info("I'll run in a separate thread than the main thread.");
       });
       CompletableFuture<Void> sendMail = CompletableFuture.runAsync(() -> {
-        sendEmail();
+        sendEmail(object2Json(mails));
         log.info("I'll run in a separate thread than the main thread.");
       });
 
