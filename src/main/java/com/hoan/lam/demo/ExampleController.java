@@ -16,6 +16,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sendgrid.Content;
+import com.sendgrid.Email;
+import com.sendgrid.Mail;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -59,6 +62,29 @@ public class ExampleController {
     return "Greetings from Spring Boot!";
   }
 
+  private void sendEmail() {
+    Email from = new Email("test@example.com");
+    String subject = "Sending with SendGrid is Fun";
+    Email to = new Email("baohoan906@gmail.com");
+    Content content = new Content("text/plain", "and easy to do anywhere, even with Java");
+    Mail mail = new Mail(from, subject, to, content);
+
+    SendGrid sg =
+        new SendGrid("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");
+    Request request = new Request();
+    try {
+      request.setMethod(Method.POST);
+      request.setEndpoint("mail/send");
+      request.setBody(mail.build());
+      Response response = sg.api(request);
+      log.info("code: {}", response.getStatusCode());
+      log.info("body: {}", response.getBody());
+      log.info("headers: {}", response.getHeaders());
+    } catch (IOException ex) {
+      log.info(ex.getMessage());
+    }
+  }
+
   private int deleteMails(Set<String> emailDeleteds) {
     if (emailDeleteds.isEmpty()) {
       return -1;
@@ -91,12 +117,17 @@ public class ExampleController {
       String json = object2Json(requestBody);
       log.info("post method is loading... {}", json);
 
-      CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+      CompletableFuture<Void> deleteMails = CompletableFuture.runAsync(() -> {
         deleteMails(requestBody.stream().map(x -> x.getEmail()).collect(Collectors.toSet()));
         log.info("I'll run in a separate thread than the main thread.");
       });
-      
-      log.info("Run Async is done! {}", future.isDone());
+      CompletableFuture<Void> sendMail = CompletableFuture.runAsync(() -> {
+        sendEmail();
+        log.info("I'll run in a separate thread than the main thread.");
+      });
+
+      log.info("Run Async is done! {}", deleteMails.isDone());
+      log.info("Run Async is done! {}", sendMail.isDone());
       return json;
     }
     log.info("post method is loading...");
