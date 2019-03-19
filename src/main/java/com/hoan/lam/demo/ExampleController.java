@@ -64,7 +64,7 @@ public class ExampleController {
       return -1;
     }
     SendGrid sg =
-        new SendGrid("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");
+        new SendGrid("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");
     DeleteMailRequest deleteMailsRequest = new DeleteMailRequest();
     deleteMailsRequest.setEmails(emailDeleteds);
     String requestBody = object2Json(deleteMailsRequest);
