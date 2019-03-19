@@ -123,7 +123,7 @@ public class ExampleController {
 	public String load(@RequestBody List<Bounce> requestBody) {
 		if (requestBody != null) {
 			String json = object2Json(requestBody);
-			if (requestBody.get(0).getCategories().isEmpty()) {
+			if (requestBody.get(0).getCategories() == null) {
 				log.info("empty categories");
 			} else {
 				log.info("category {}", requestBody.get(0).getCategories().get(0));
