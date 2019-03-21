@@ -168,8 +168,8 @@ public class ExampleController {
     return "";
   }
 
-  @PostMapping("/rawLoad")
-  public String rawLoad(HttpServletRequest request, HttpServletResponse response) {
+  @PostMapping("/rawRequest")
+  public String rawRequest(HttpServletRequest request, HttpServletResponse response) {
     log.info("RAW Data {}", object2Json(extractPostRequestBody(request)));
     log.info("Header {}", request.getParameter("api_key"));
     return "rawload is calling";
