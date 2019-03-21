@@ -2,9 +2,13 @@ package com.hoan.lam.demo;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -149,4 +153,26 @@ public class ExampleController {
     log.info("RAW Data {}", object2Json(requestBody));
     return "rawload is calling";
   }
+
+  @SuppressWarnings("resource")
+  static String extractPostRequestBody(HttpServletRequest request) {
+    if ("POST".equalsIgnoreCase(request.getMethod())) {
+      Scanner s = null;
+      try {
+        s = new Scanner(request.getInputStream(), "UTF-8").useDelimiter("\\A");
+      } catch (IOException e) {
+        log.error("Extract body from request failed {}", e.getMessage());
+      }
+      return (s != null && s.hasNext()) ? s.next() : "";
+    }
+    return "";
+  }
+
+  @PostMapping("/rawLoad")
+  public String rawLoad(HttpServletRequest request, HttpServletResponse response) {
+    log.info("RAW Data {}", object2Json(extractPostRequestBody(request)));
+    log.info("Header {}", request.getParameter("api_key"));
+    return "rawload is calling";
+  }
+
 }
