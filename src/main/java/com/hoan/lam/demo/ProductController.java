@@ -25,6 +25,7 @@ import com.hoan.lam.demo.response.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@CrossOrigin(origins = "", allowedHeaders = "")
 @RestController
 public class ProductController {
 
