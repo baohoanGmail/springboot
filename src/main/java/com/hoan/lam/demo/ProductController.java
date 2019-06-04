@@ -25,7 +25,6 @@ import com.hoan.lam.demo.response.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@CrossOrigin(origins = "", allowedHeaders = "")
 @RestController
 public class ProductController {
 
@@ -69,7 +68,8 @@ public class ProductController {
 		}
 		return temps;
 	}
-
+	
+	@CrossOrigin(origins = "", allowedHeaders = "")
 	@RequestMapping(value = "/products")
 	public ResponseEntity<RestResponse> search(@RequestParam(required = false, name = "productNo") String productNo,
 			@RequestParam(required = false, name = "productName") String productName,
