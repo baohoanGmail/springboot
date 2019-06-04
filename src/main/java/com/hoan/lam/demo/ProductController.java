@@ -107,13 +107,13 @@ public class ProductController {
 		if (CollectionUtils.isNotEmpty(products)) {
 			List<Product> results = searchWithCriterials(products, textSearch, dateSearch);
 			response.setTotal(results.size());
-			if (limit > 0) {
+			if (limit > 0 && offset > 0) {
 				response.setOffset(offset);
-				int hasMore = (offset > 0) ? (offset * limit) : limit;
-				response.setMore(hasMore < response.getTotal());
-				response.setData(results.stream().skip((offset * limit)).limit(limit));
+				response.setMore((offset * limit) < response.getTotal());
+				response.setData(results.stream().skip(((offset - 1) * limit)).limit(limit));
 			} else {
 				response.setMore(false);
+				response.setOffset(1);
 				response.setData(results);
 			}
 			response.setStatus("success");
