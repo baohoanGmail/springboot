@@ -13,11 +13,13 @@ import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.hoan.lam.demo.model.Product;
 import com.hoan.lam.demo.response.ErrorElement;
 import com.hoan.lam.demo.response.RestResponse;
@@ -68,9 +70,9 @@ public class ProductController {
 		}
 		return temps;
 	}
-	
-	@CrossOrigin(origins = "", allowedHeaders = "")
-	@RequestMapping(value = "/products")
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@RequestMapping(value = "/products", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<RestResponse> search(@RequestParam(required = false, name = "productNo") String productNo,
 			@RequestParam(required = false, name = "productName") String productName,
 			@RequestParam(required = false, name = "orderNo") String orderNo,
