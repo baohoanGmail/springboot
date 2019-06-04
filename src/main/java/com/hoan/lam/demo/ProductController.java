@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.hoan.lam.demo.model.Product;
 import com.hoan.lam.demo.response.ErrorElement;
 import com.hoan.lam.demo.response.RestResponse;
