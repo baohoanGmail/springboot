@@ -2,14 +2,21 @@ package com.hoan.lam.demo;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class FileXL {
 
 	public URI getUri() throws URISyntaxException {
 
-		System.out.println("get Class Loader: " + this.getClass() != null);
+		log.info("get Class Loader: {}", this.getClass() != null);
+		URL url = getClass().getClassLoader().getResource("SMC157-OUT_20190822145120_RES.txt");
 
-		return this.getClass().getClassLoader().getResource("SMC157-OUT_20190822145120_RES.txt").toURI();
+		log.info("URL is empty {}", url);
+
+		return url.toURI();
 	}
 
 //	 // get file from classpath, resources folder
