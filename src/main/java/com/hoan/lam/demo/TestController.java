@@ -12,33 +12,26 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import com.hoan.lam.demo.FileXL;
 
 @Controller
 public class TestController {
 
-  public class FileXL {
+	@PostMapping("/download")
+	public ResponseEntity<InputStreamResource> downloadFile1() throws IOException, URISyntaxException {
 
-    public URI getUri() throws URISyntaxException {
-      return FileXL.class.getResource("/SMC157-OUT_20190822145120_RES.txt").toURI();
-    }
-  }
+		File file = new File(new FileXL().getUri());
+		System.out.println(file.getPath());
+		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
-  @PostMapping("/download")
-  public ResponseEntity<InputStreamResource> downloadFile1()
-      throws IOException, URISyntaxException {
-
-    File file = new File(new FileXL().getUri());
-
-    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-
-    return ResponseEntity.ok()
-        // Content-Disposition
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
-        // Content-Type
-        .contentType(MediaType.TEXT_PLAIN)
-        // Contet-Length
-        .contentLength(file.length()) //
-        .body(resource);
-  }
+		return ResponseEntity.ok()
+				// Content-Disposition
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
+				// Content-Type
+				.contentType(MediaType.TEXT_PLAIN)
+				// Contet-Length
+				.contentLength(file.length()) //
+				.body(resource);
+	}
 
 }
