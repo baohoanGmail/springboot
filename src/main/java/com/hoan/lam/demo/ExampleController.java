@@ -1,31 +1,44 @@
 package com.hoan.lam.demo;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-@Slf4j
-@RestController
-public class ExampleController {
+@Controller
+public class TestController {
 
-	@RequestMapping("/")
-	public String index() {
-		log.info("get method is calling... {}");
-		return "Greetings from Spring Boot!";
-	}
+  public class FileXL {
 
-	@PostMapping("/load")
-	public String load(@RequestBody Object obj) {
-		if (obj != null) {
-			log.info("post method is loading... {}", obj.toString());
-			return obj.toString();
-		}
-		log.info("post method is loading...");
-		return "Greetings from Spring Boot!";
-	}
+    public URI getUri() throws URISyntaxException {
+      return FileXL.class.getResource("/SMC157-OUT_20190822145120_RES.txt").toURI();
+    }
+  }
+
+  @PostMapping("/download")
+  public ResponseEntity<InputStreamResource> downloadFile1()
+      throws IOException, URISyntaxException {
+
+    File file = new File(new FileXL().getUri());
+
+    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+    return ResponseEntity.ok()
+        // Content-Disposition
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
+        // Content-Type
+        .contentType(MediaType.TEXT_PLAIN)
+        // Contet-Length
+        .contentLength(file.length()) //
+        .body(resource);
+  }
 
 }
