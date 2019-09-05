@@ -3,35 +3,46 @@ package com.hoan.lam.demo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.Optional;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.hoan.lam.demo.FileXL;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class TestController {
 
-	@PostMapping("/download")
-	public ResponseEntity<InputStreamResource> downloadFile1() throws IOException, URISyntaxException {
+  @PostMapping(value = "test/download")
+  public ResponseEntity<InputStreamResource> downloadFile(
+      @RequestParam(name = "filename", required = true) Optional<String> filename,
+      @RequestParam(name = "contentType", required = false) Optional<String> type)
+      throws IOException {
 
-		File file = new File(new FileXL().getUri());
-		System.out.println(file.getPath());
-		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+    if (!filename.isPresent()) {
+      return ResponseEntity.badRequest().build();
+    }
 
-		return ResponseEntity.ok()
-				// Content-Disposition
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
-				// Content-Type
-				.contentType(MediaType.TEXT_PLAIN)
-				// Contet-Length
-				.contentLength(file.length()) //
-				.body(resource);
-	}
+    File file = new File("src/main/resources/" + filename.get());
+
+    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+    BodyBuilder bodyBuilder = ResponseEntity.ok()
+        // Content-Disposition
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName());
+
+    // Content-Type
+    if (type.isPresent()) {
+      bodyBuilder.contentType(MediaType.valueOf(type.get()));
+    } else {
+      bodyBuilder.contentType(MediaType.TEXT_PLAIN);
+    }
+    // Contet-Length
+    return bodyBuilder.contentLength(file.length()).body(resource);
+  }
 
 }
