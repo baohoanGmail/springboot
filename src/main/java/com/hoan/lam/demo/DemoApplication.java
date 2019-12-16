@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
-import com.hoan.lam.demo.filter.RequestResponseFiIter;
+import com.hoan.lam.demo.filter.GZipServletFilter;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -14,11 +14,21 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
+//	@Bean
+//	public FilterRegistrationBean<RequestResponseFiIter> loggingFilter() {
+//		FilterRegistrationBean<RequestResponseFiIter> registrationBean = new FilterRegistrationBean<>();
+//
+//		registrationBean.setFilter(new RequestResponseFiIter());
+//		registrationBean.addUrlPatterns("*");
+//
+//		return registrationBean;
+//	}
+	
 	@Bean
-	public FilterRegistrationBean<RequestResponseFiIter> loggingFilter() {
-		FilterRegistrationBean<RequestResponseFiIter> registrationBean = new FilterRegistrationBean<>();
+	public FilterRegistrationBean<GZipServletFilter> loggingFilter() {
+		FilterRegistrationBean<GZipServletFilter> registrationBean = new FilterRegistrationBean<>();
 
-		registrationBean.setFilter(new RequestResponseFiIter());
+		registrationBean.setFilter(new GZipServletFilter());
 		registrationBean.addUrlPatterns("*");
 
 		return registrationBean;
