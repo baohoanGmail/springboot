@@ -4,10 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 
 import javax.servlet.Filter;
@@ -23,9 +30,14 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
+import com.hoan.lam.demo.util.JsonUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,19 +55,29 @@ public class GZipServletFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
 
-		HttpServletRequest request = (HttpServletRequest) req;
+		HttpServletRequest requestWrapper = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		MultiReadRequestWrapper requestWrapper = new MultiReadRequestWrapper(request);
-
-		RequestLog logger = new RequestLog();
-		logger.setMethod(request.getMethod());
-		logger.setContentType(req.getContentType());
-		logger.setUri(request.getRequestURI());
-		logger.setBody(requestWrapper.getBody());
-		logger.setParams(getParameters(request));
-		logger.setHeaders(getHeaders(request));
 		
-		log.info("{}", logger);
+//		ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest) req);
+//		requestWrapper.getParameterMap(); // needed for caching!!
+		
+		String now = LocalDateTime.now().toString();
+		log.info("[B] ------------------------ {} -----------------------------------------------------------", now);
+		RequestLog logger = new RequestLog();
+		logger.setBody(JsonUtil.getValueOfFirst(requestWrapper.getParameterMap()));
+		logger.setMethod(requestWrapper.getMethod());
+		logger.setContentType(requestWrapper.getContentType());
+		logger.setUri(requestWrapper.getRequestURI());
+		logger.setUrl(requestWrapper.getRequestURL().toString());
+//		String body = IOUtils.toString(requestWrapper.getContentAsByteArray(), StandardCharsets.UTF_8.name());
+//		logger.setBody(body);
+
+		logger.setParams(getParameters(requestWrapper));
+		logger.setHeaders(getHeaders(requestWrapper));
+
+		log.info("Filter: {}", logger);
+		log.info("[E] ------------------------ {} ----------------------------------------------------------", now);
+
 		chain.doFilter(requestWrapper, response);
 	}
 

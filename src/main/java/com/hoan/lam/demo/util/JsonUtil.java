@@ -2,7 +2,14 @@ package com.hoan.lam.demo.util;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.io.IOUtils;
+import org.springframework.util.MultiValueMap;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -114,5 +121,20 @@ public class JsonUtil {
 	
 	public static JsonNode emptyArray() {
 		return getObjectMapper().createArrayNode();
+	}
+	
+	public static String parse(byte[] bytes, String encoding) throws IOException {
+		String jsonBody = IOUtils.toString(bytes, encoding);
+		String jsonDecoded = URLDecoder.decode(jsonBody, encoding);
+		int equalIdx = jsonDecoded.lastIndexOf('=');
+		return (equalIdx > 0) ? jsonDecoded.substring(0, equalIdx) : jsonDecoded;
+	}
+
+	public static <T> T parse(byte[] bytes, String encoding, Class<T> clazz) throws IOException {
+		return str2bean(parse(bytes, encoding), clazz);
+	}
+	
+	public static <T> String getValueOfFirst(Map<String, T> map) {
+		return map.entrySet().iterator().next().getKey();
 	}
 }
