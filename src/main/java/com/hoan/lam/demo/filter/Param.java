@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-class Param {
+public class Param {
 	private String name;
 	private String[] value;
 }
