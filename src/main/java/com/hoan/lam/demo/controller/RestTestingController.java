@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RestTestingController {
 	
 	@PostMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<MFWResult> search(@RequestBody MultiValueMap<String, String> multipleValueMap) throws IOException {
+	public MFWResponse search(@RequestBody MultiValueMap<String, String> multipleValueMap) throws IOException {
 		String json = JsonUtil.getValueOfFirst(multipleValueMap);
 		MFWOrderInquiry inquiry = JsonUtil.str2bean(json, MFWOrderInquiry.class); 
 		log.info("JsonNormalization: {}", JsonUtil.toJson(inquiry));
@@ -149,7 +149,8 @@ public class RestTestingController {
 		MFWResult result = new MFWResult();
 		result.setData(resultBooking);
 		
-		return ResponseEntity.ok(result);
+		MFWResponse orderResponse = new MFWResponse(MFWSysStatusEnum.MFW0, result);
+		return orderResponse;
 	}
 	
 	/*
