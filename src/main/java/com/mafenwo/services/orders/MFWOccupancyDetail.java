@@ -9,6 +9,7 @@ public class MFWOccupancyDetail {
 
     @NotNull(message = "childCount is null")
 	private Integer childCount;
+    private boolean childCountSpecified;
     
     @NotNull(message = "adultCount is null")
 	private Integer adultCount;

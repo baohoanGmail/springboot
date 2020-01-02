@@ -11,4 +11,5 @@ public class MFWGuestInfo {
 	private MFWName name;
 	private Boolean isAdult;
 	private Integer age;
+	private Boolean ageSpecified;
 }

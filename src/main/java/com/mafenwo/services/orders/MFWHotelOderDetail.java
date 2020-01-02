@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MFWHotelOderDetail {
 
-	private long totalPriceWithoutSupplement;
-	private long totalSupplement;
+	private boolean totalPriceWithoutSupplementSpecified;
+	private boolean totalSupplementSpecified;
+	private boolean totalPriceSpecified;
+	private MFWDestination destination;
 	private long totalPrice;
 	private String hotelId;
 	private String hotelName;

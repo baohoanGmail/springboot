@@ -17,7 +17,7 @@ public class MFWBookingDetails {
 	private String orderDate;
 	private String checkInDate;
 	private String checkOutDate;
-	private Integer totalOfRooms;
+	private Integer numOfRooms; // edit same response example - cntri
 	private Integer status;
 	private List<MFWGuest> guestList;
 	private MFWContact contact;

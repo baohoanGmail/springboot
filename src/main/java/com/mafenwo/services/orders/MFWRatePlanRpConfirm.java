@@ -17,13 +17,25 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class MFWRatePlanRpConfirm {
 
+	private boolean standardOccupancySpecified;
+	private boolean priceWithoutSupplementSpecified;
+	private boolean supplementSpecified;
 	private long totalPrice;
+	private boolean inventoryCountSpecified;
+	private boolean maxOccupancySpecified;
+	
 	private Integer roomStatus;
-	private String breakfastType;
-	private String bedType;
-	private List<MFWOccupancyDetail> roomOccupancy;
+	private Integer breakfastType;
+	private Integer bedType;
+	private MFWOccupancyDetail roomOccupancy;
 	private List<MFWPriceItem> priceList;
 	private String standardOccupancy;
 	private String inventoryCount;
 	private Integer maxOccupancy;
+	private String currency;
+	private String roomName;
+	private String roomId;
+	private String ratePlanName;
+	private String ratePlanId;
+	
 }

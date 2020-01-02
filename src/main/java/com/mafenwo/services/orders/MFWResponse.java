@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class MFWResponse {
 
+	@JsonInclude(Include.NON_NULL)
 	private Integer errorCode;
+	@JsonInclude(Include.NON_NULL)
 	private String errorMessage;
 	private Object data;
 

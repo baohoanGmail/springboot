@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class MFWGuest {
 
-	private Integer roomIndex;
+	private Integer roomNum;
 	private List<MFWGuestInfo> guestInfo;
 }
