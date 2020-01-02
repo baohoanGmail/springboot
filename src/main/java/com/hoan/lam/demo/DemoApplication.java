@@ -24,13 +24,13 @@ public class DemoApplication {
 //		return registrationBean;
 //	}
 	
-	@Bean
-	public FilterRegistrationBean<GZipServletFilter> loggingFilter() {
-		FilterRegistrationBean<GZipServletFilter> registrationBean = new FilterRegistrationBean<>();
+//	@Bean
+//	public FilterRegistrationBean<GZipServletFilter> loggingFilter() {
+//		FilterRegistrationBean<GZipServletFilter> registrationBean = new FilterRegistrationBean<>();
 
-		registrationBean.setFilter(new GZipServletFilter());
-		registrationBean.addUrlPatterns("*");
+//		registrationBean.setFilter(new GZipServletFilter());
+//		registrationBean.addUrlPatterns("*");
 
-		return registrationBean;
-	}
+//		return registrationBean;
+//	}
 }
